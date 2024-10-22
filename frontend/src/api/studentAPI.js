@@ -48,3 +48,18 @@ export const getStudentById = async (studentId) => {
 export const updateStudentNotes = async (studentId, data) => {
   return await axios.put(`${API_URL}/students/${studentId}/notes`, data);
 };
+
+// Function to update student details
+export const updateStudentDetails = async (studentID, data) => {
+  return await axios.put(`${API_URL}/students/${studentID}`, data);
+};
+
+// Function to delete a student
+export const deleteStudent = async (studentID) => {
+  return await axios.delete(`${API_URL}/students/${studentID}`);
+};
+
+// Function to mark all months as paid
+export const setAllMonthsPaid = async (studentID) => {
+  return await axios.put(`${API_URL}/students/${studentID}/set-all-paid`);
+};

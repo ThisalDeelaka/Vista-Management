@@ -81,3 +81,57 @@ exports.getStudentById = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+exports.updateStudentDetails = async (req, res) => {
+  try {
+    const { studentID } = req.params;
+    const updateData = req.body;
+    const student = await Student.findOneAndUpdate({ studentID }, updateData, { new: true });
+    if (student) {
+      res.json(student);
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+};
+
+// Delete a student
+exports.deleteStudent = async (req, res) => {
+  try {
+    const { studentID } = req.params;
+    const result = await Student.findOneAndDelete({ studentID });
+    if (result) {
+      res.json({ msg: 'Student deleted successfully' });
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+};
+
+// Mark all months as paid (Free Card feature)
+exports.setAllMonthsPaid = async (req, res) => {
+  try {
+    const { studentID } = req.params;
+    const student = await Student.findOne({ studentID });
+
+    if (student) {
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      months.forEach(month => {
+        student.paymentStatus.set(month, true);
+      });
+      await student.save();
+      res.json(student);
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+};
