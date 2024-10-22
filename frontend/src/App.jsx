@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import AddStudentPage from './pages/AddStudentPage';
 import ViewStudentsPage from './pages/ViewStudentsPage';
 import PaymentStatusPage from './pages/PaymentStatusPage';
+import StudentProfile from './pages/StudentProfile';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/add-student" element={<AddStudentPage />} />
             <Route path="/view-students" element={<ViewStudentsPage />} />
             <Route path="/payment-status" element={<PaymentStatusPage />} />
+            <Route path="/students/:studentID" element={<StudentProfile />} /> {/* New route for student profile */}
           </Routes>
         </main>
         <Footer />
