@@ -19,7 +19,7 @@ const App = () => {
             <Route path="/add-student" element={<AddStudentPage />} />
             <Route path="/view-students" element={<ViewStudentsPage />} />
             <Route path="/payment-status" element={<PaymentStatusPage />} />
-            <Route path="/students/:studentID" element={<StudentProfile />} /> {/* New route for student profile */}
+            <Route path="/student/:studentID" element={<StudentProfile />} />
           </Routes>
         </main>
         <Footer />

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams
 import { getStudentById } from '../api/studentAPI';
 
-const StudentProfile = ({ match }) => {
-  const { studentID } = match.params;
+const StudentProfile = () => {
+  const { studentID } = useParams(); // Use useParams to get studentID from URL
   const [student, setStudent] = useState(null);
 
   useEffect(() => {

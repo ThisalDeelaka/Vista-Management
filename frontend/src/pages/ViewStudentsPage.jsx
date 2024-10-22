@@ -136,7 +136,7 @@ const ViewStudentsPage = () => {
                 <tr 
                   key={student.studentID} 
                   className="border-t hover:bg-gray-100 cursor-pointer transition-all duration-200"
-                  onClick={() => navigate(`/students/${student.studentID}`)}
+                  onClick={() => navigate(`/student/${student.studentID}`)} // Updated URL path
                 >
                   <td className="py-3 px-4">{student.studentID}</td>
                   <td className="py-3 px-4">{student.name}</td>

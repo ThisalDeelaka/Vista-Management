@@ -67,3 +67,17 @@ exports.getAllStudentIDs = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+exports.getStudentById = async (req, res) => {
+  try {
+    const { studentID } = req.params;
+    const student = await Student.findOne({ studentID });
+    if (student) {
+      res.json(student);
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+};
