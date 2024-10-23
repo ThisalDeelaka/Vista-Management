@@ -93,7 +93,6 @@ const StudentProfile = () => {
     }
   };
   
-
   const handleEditToggle = () => setEditMode(!editMode);
 
   const handleFormChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -116,13 +115,13 @@ const StudentProfile = () => {
   if (!student) return <div className="flex justify-center items-center h-screen">Loading...</div>;
 
   return (
-    <div className="container mx-auto p-8 bg-gray-100">
+    <div className="container mx-auto p-6 sm:p-8 bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-        <h1 className="text-4xl font-bold mb-4">{student.name}'s Profile</h1>
-        <div className="text-lg mb-4"><strong>Student ID:</strong> {`${formData.studentLetter}${formData.studentNumber}`}</div>
-        <div className="text-lg mb-4"><strong>Grade:</strong> {student.grade}</div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4">{student.name}'s Profile</h1>
+        <div className="text-md sm:text-lg mb-4"><strong>Student ID:</strong> {`${formData.studentLetter}${formData.studentNumber}`}</div>
+        <div className="text-md sm:text-lg mb-4"><strong>Grade:</strong> {student.grade}</div>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           <button onClick={handleEditToggle} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit Student</button>
           <button onClick={handleDeleteStudent} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete Student</button>
           {isFreeCard ? (
@@ -150,7 +149,7 @@ const StudentProfile = () => {
       </div>
 
       <div className="bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-3xl font-bold mb-4">Payment History:</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Payment History:</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border">
             <thead>
@@ -173,7 +172,7 @@ const StudentProfile = () => {
                     <button
                       onClick={() => handleUpdatePayment(month)}
                       disabled={student.paymentStatus[month]}
-                      className={`px-4 py-2 rounded-md ${student.paymentStatus[month] ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600'}`}
+                      className={`px-4 py-2 rounded-md transition duration-200 ${student.paymentStatus[month] ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600'}`}
                     >
                       {student.paymentStatus[month] ? 'Paid' : 'Mark as Paid'}
                     </button>

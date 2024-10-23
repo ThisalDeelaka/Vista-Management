@@ -55,13 +55,13 @@ const StudentForm = ({ onSubmit }) => {
   }, [formData.studentLetter, formData.studentNumber]);
 
   return (
-    <div className="h-screen w-screen bg-gray-100 flex justify-center items-center p-4">
+    <div className="min-h-screen w-full bg-gray-100 flex justify-center items-center p-4">
       <form 
         onSubmit={handleSubmit} 
-        className="w-full max-w-5xl h-full bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col p-8 space-y-6"
+        className="w-full max-w-4xl bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col p-6 md:p-8 space-y-6"
       >
-        <div className="flex justify-between items-center">
-          <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
+        <div className="flex justify-between items-center flex-wrap gap-3">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-800 mb-2 md:mb-4">
             Add New Student
           </h2>
           <Button type="submit" disabled={isDuplicateID}>
@@ -69,11 +69,11 @@ const StudentForm = ({ onSubmit }) => {
           </Button>
         </div>
 
-        <p className="text-gray-600 text-center text-xl font-bold mt-4">
+        <p className="text-gray-600 text-center text-lg md:text-xl font-bold mt-2">
           Selected ID: <span className="font-semibold">{`G${formData.grade}/${formData.studentLetter}${formData.studentNumber}`}</span>
         </p>
 
-        <div className="flex flex-wrap flex-grow justify-between space-y-6 lg:space-y-0">
+        <div className="flex flex-wrap justify-between space-y-6 lg:space-y-0">
           {/* Left Column */}
           <div className="w-full lg:w-1/2 p-3 space-y-5">
             {/* Name Input */}
@@ -91,7 +91,7 @@ const StudentForm = ({ onSubmit }) => {
             {/* Grade Input */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">Grade Level</label>
-              <div className="flex flex-wrap gap-3 mb-2">
+              <div className="flex flex-wrap gap-2 mb-2">
                 {Array.from({ length: 11 }, (_, i) => i + 1).map((grade) => (
                   <button
                     key={grade}
@@ -132,7 +132,7 @@ const StudentForm = ({ onSubmit }) => {
 
                 {/* Grid for Numbers */}
                 <div className="w-full">
-                  <div className="grid grid-cols-5 gap-2 pb-2">
+                  <div className="grid grid-cols-5 gap-2">
                     {Array.from({ length: 25 }, (_, i) => i + 1).map((number) => {
                       const studentID = `${formData.studentLetter}${number}`;
                       const isDisabled = takenIDs.includes(studentID);
@@ -143,7 +143,7 @@ const StudentForm = ({ onSubmit }) => {
                           type="button"
                           onClick={() => handleNumberSelect(number)}
                           disabled={isDisabled}
-                          className={`py-3 px-4 rounded-lg text-lg font-medium border ${
+                          className={`py-2 px-3 rounded-lg text-lg font-medium border ${
                             formData.studentNumber === String(number) ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 hover:bg-gray-200'
                           } transition duration-200 ${
                             isDisabled ? 'opacity-50 cursor-not-allowed' : ''

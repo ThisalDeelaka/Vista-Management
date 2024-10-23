@@ -105,16 +105,16 @@ const ViewStudentsPage = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-8">
+    <div className="bg-gray-50 min-h-screen p-4 sm:p-8">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Manage Students</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 text-center">Manage Students</h1>
 
         {/* Unpaid Filter Toggle */}
-        <div className="flex justify-between mb-8 items-center">
+        <div className="flex flex-col sm:flex-row justify-between mb-8 items-center space-y-4 sm:space-y-0">
           <div className="flex items-center space-x-4">
             <button 
               onClick={() => setShowUnpaidOnly(!showUnpaidOnly)}
-              className={`flex items-center px-4 py-2 text-lg font-bold rounded-full shadow-md transition-transform transform ${
+              className={`flex items-center px-4 py-2 text-base sm:text-lg font-bold rounded-full shadow-md transition-transform transform ${
                 showUnpaidOnly ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'
               }`}
             >
@@ -135,17 +135,17 @@ const ViewStudentsPage = () => {
         </div>
         
         {/* Visual Selectors */}
-        <div className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start justify-items-center">
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-start justify-items-center">
           {/* Grade Selector */}
           <div className="w-full flex flex-col items-center">
-            <label className="block text-gray-600 font-medium mb-3 text-lg">Select Grade:</label>
+            <label className="block text-gray-600 font-medium mb-3 text-base sm:text-lg">Select Grade:</label>
             <div className="flex flex-wrap gap-2 justify-center">
               {Array.from({ length: 11 }, (_, i) => i + 1).map((gradeOption) => (
                 <button
                   key={gradeOption}
                   type="button"
                   onClick={() => toggleSelection(grade, setGrade, gradeOption)}
-                  className={`py-2 px-4 rounded-full text-lg font-medium border shadow-sm ${
+                  className={`py-2 px-4 rounded-full text-base sm:text-lg font-medium border shadow-sm ${
                     grade === gradeOption ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 hover:bg-blue-100'
                   } transition duration-300 ease-in-out`}
                 >
@@ -157,14 +157,14 @@ const ViewStudentsPage = () => {
 
           {/* Letter Selector */}
           <div className="w-full flex flex-col items-center">
-            <label className="block text-gray-600 font-medium mb-3 text-lg">Select Letter:</label>
+            <label className="block text-gray-600 font-medium mb-3 text-base sm:text-lg">Select Letter:</label>
             <div className="flex gap-2 justify-center">
               {['A', 'B', 'C', 'D', 'E', 'F'].map((letterOption) => (
                 <button
                   key={letterOption}
                   type="button"
                   onClick={() => toggleSelection(letter, setLetter, letterOption)}
-                  className={`py-2 px-4 rounded-full text-lg font-medium border shadow-sm ${
+                  className={`py-2 px-4 rounded-full text-base sm:text-lg font-medium border shadow-sm ${
                     letter === letterOption ? 'bg-green-600 text-white' : 'bg-white text-gray-800 hover:bg-green-100'
                   } transition duration-300 ease-in-out`}
                 >
@@ -176,14 +176,14 @@ const ViewStudentsPage = () => {
 
           {/* Number Selector */}
           <div className="w-full flex flex-col items-center">
-            <label className="block text-gray-600 font-medium mb-3 text-lg">Select Number:</label>
+            <label className="block text-gray-600 font-medium mb-3 text-base sm:text-lg">Select Number:</label>
             <div className="grid grid-cols-5 gap-2 justify-center">
               {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
                 <button
                   key={num}
                   type="button"
                   onClick={() => toggleSelection(number, setNumber, String(num))}
-                  className={`py-2 px-3 rounded-lg text-lg font-medium border shadow-sm ${
+                  className={`py-2 px-3 rounded-lg text-base sm:text-lg font-medium border shadow-sm ${
                     number === String(num) ? 'bg-yellow-500 text-white' : 'bg-white text-gray-800 hover:bg-yellow-100'
                   } transition duration-300 ease-in-out`}
                 >
@@ -199,10 +199,10 @@ const ViewStudentsPage = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr className="bg-gray-200 text-gray-700">
-                <th className="py-3 px-4 text-left text-md">Student ID</th>
-                <th className="py-3 px-4 text-left text-md">Name</th>
-                <th className="py-3 px-4 text-left text-md">Grade</th>
-                <th className="py-3 px-4 text-left text-md">Actions</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Student ID</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Name</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Grade</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Actions</th>
               </tr>
             </thead>
             <tbody>

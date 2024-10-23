@@ -14,7 +14,7 @@ const AddStudentPage = () => {
   };
 
   return (
-    <div className="bg-gray-50 h-screen flex items-center justify-center">
+    <div className="bg-gray-50 min-h-screen flex items-center justify-center p-4">
       <StudentForm onSubmit={handleAddStudent} />
     </div>
   );

@@ -66,7 +66,7 @@ const PaymentStatusPage = () => {
           {/* Month Selector */}
           <div className="w-full lg:w-2/3">
             <span className="block text-gray-600 font-medium mb-3 text-lg text-center lg:text-left">Select Month:</span>
-            <div className="grid grid-cols-3 gap-2 md:grid-cols-4 justify-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 justify-center">
               {months.map((m) => (
                 <button
                   key={m}
@@ -88,10 +88,10 @@ const PaymentStatusPage = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr className="bg-gray-200 text-gray-700">
-                <th className="py-3 px-4 text-left text-md">Student ID</th>
-                <th className="py-3 px-4 text-left text-md">Name</th>
-                <th className="py-3 px-4 text-left text-md">Grade</th>
-                <th className="py-3 px-4 text-left text-md">Actions</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Student ID</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Name</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Grade</th>
+                <th className="py-3 px-4 text-left text-sm sm:text-md">Actions</th>
               </tr>
             </thead>
             <tbody>
