@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { getStudentsByGrade, updatePaymentStatus } from '../api/studentAPI';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentMonth } from '../utils/dateUtils'; // Utility function to get the current month
+import { getCurrentMonth } from '../utils/dateUtils';
+import { FaFilePdf, FaFilter, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const ViewStudentsPage = () => {
   const [grade, setGrade] = useState(null);
   const [letter, setLetter] = useState(null);
   const [number, setNumber] = useState(null);
   const [students, setStudents] = useState([]);
+  const [showUnpaidOnly, setShowUnpaidOnly] = useState(false); // State to toggle unpaid filter
   const navigate = useNavigate();
   const currentMonth = getCurrentMonth(); // Get the current month (e.g., 'October')
 
@@ -20,7 +24,13 @@ const ViewStudentsPage = () => {
             (!letter || student.studentID.startsWith(letter)) && 
             (!number || student.studentID.endsWith(number))
           );
-          setStudents(filteredStudents);
+
+          // Apply unpaid filter if selected
+          const studentsToShow = showUnpaidOnly
+            ? filteredStudents.filter(student => !student.paymentStatus[currentMonth])
+            : filteredStudents;
+
+          setStudents(studentsToShow);
         } else {
           setStudents([]); // Clear students if no grade is selected
         }
@@ -29,7 +39,7 @@ const ViewStudentsPage = () => {
       }
     };
     fetchStudents();
-  }, [grade, letter, number]);
+  }, [grade, letter, number, showUnpaidOnly]);
 
   const handleMarkAsPaid = async (studentID) => {
     try {
@@ -46,6 +56,45 @@ const ViewStudentsPage = () => {
     }
   };
 
+  const generatePDFReport = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('Student Payment Report', 14, 20);
+    
+    const unpaidStudents = students.filter(student => !student.paymentStatus[currentMonth]);
+    const paidStudents = students.filter(student => student.paymentStatus[currentMonth]);
+
+    // Generate unpaid students table
+    if (unpaidStudents.length > 0) {
+      doc.setFontSize(14);
+      doc.text('Unpaid Students:', 14, 30);
+      doc.autoTable({
+        startY: 35,
+        head: [['Student ID', 'Name', 'Grade']],
+        body: unpaidStudents.map(student => [
+          student.studentID, student.name, `Grade ${student.grade}`
+        ]),
+      });
+    }
+
+    // Generate paid students table
+    if (paidStudents.length > 0) {
+      const yPosition = unpaidStudents.length > 0 ? doc.autoTable.previous.finalY + 10 : 35;
+      doc.setFontSize(14);
+      doc.text('Paid Students:', 14, yPosition);
+      doc.autoTable({
+        startY: yPosition + 5,
+        head: [['Student ID', 'Name', 'Grade']],
+        body: paidStudents.map(student => [
+          student.studentID, student.name, `Grade ${student.grade}`
+        ]),
+      });
+    }
+
+    // Save the PDF
+    doc.save(`Student_Payment_Report_${currentMonth}.pdf`);
+  };
+
   // Toggle function for selectors
   const toggleSelection = (current, setFunction, value) => {
     if (current === value) {
@@ -59,6 +108,31 @@ const ViewStudentsPage = () => {
     <div className="bg-gray-50 min-h-screen p-8">
       <div className="container mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Manage Students</h1>
+
+        {/* Unpaid Filter Toggle */}
+        <div className="flex justify-between mb-8 items-center">
+          <div className="flex items-center space-x-4">
+            <button 
+              onClick={() => setShowUnpaidOnly(!showUnpaidOnly)}
+              className={`flex items-center px-4 py-2 text-lg font-bold rounded-full shadow-md transition-transform transform ${
+                showUnpaidOnly ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'
+              }`}
+            >
+              {showUnpaidOnly ? <FaToggleOn className="mr-2" /> : <FaToggleOff className="mr-2" />}
+              {showUnpaidOnly ? 'Showing Unpaid Students Only' : 'Show All Students'}
+            </button>
+          </div>
+
+          {/* Generate Report Button */}
+          <div>
+            <button
+              onClick={generatePDFReport}
+              className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 flex items-center"
+            >
+              <FaFilePdf className="mr-2" /> Generate Report
+            </button>
+          </div>
+        </div>
         
         {/* Visual Selectors */}
         <div className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start justify-items-center">
@@ -136,7 +210,7 @@ const ViewStudentsPage = () => {
                 <tr 
                   key={student.studentID} 
                   className="border-t hover:bg-gray-100 cursor-pointer transition-all duration-200"
-                  onClick={() => navigate(`/student/${student.studentID}`)} // Updated URL path
+                  onClick={() => navigate(`/student/${student.studentID}`)}
                 >
                   <td className="py-3 px-4">{student.studentID}</td>
                   <td className="py-3 px-4">{student.name}</td>
@@ -144,10 +218,10 @@ const ViewStudentsPage = () => {
                   <td className="py-3 px-4">
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevents navigation when marking paid
+                        e.stopPropagation();
                         handleMarkAsPaid(student.studentID);
                       }}
-                      disabled={student.paymentStatus && student.paymentStatus[currentMonth]} // Disable if paid
+                      disabled={student.paymentStatus && student.paymentStatus[currentMonth]}
                       className={`px-4 py-2 rounded-md shadow-md transition duration-200 ease-in-out ${
                         student.paymentStatus && student.paymentStatus[currentMonth]
                           ? 'bg-gray-400 text-white cursor-not-allowed'

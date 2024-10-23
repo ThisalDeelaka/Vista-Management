@@ -85,9 +85,20 @@ exports.getStudentById = async (req, res) => {
 exports.updateStudentDetails = async (req, res) => {
   try {
     const { studentID } = req.params;
-    const updateData = req.body;
-    const student = await Student.findOneAndUpdate({ studentID }, updateData, { new: true });
+    const { name, grade, studentLetter, studentNumber } = req.body;
+
+    // Generate new Student ID from the letter and number
+    const newStudentID = `${studentLetter}${studentNumber}`;
+
+    const student = await Student.findOne({ studentID });
+
     if (student) {
+      // Update details
+      student.name = name;
+      student.grade = grade;
+      student.studentID = newStudentID; // Save the new Student ID
+
+      await student.save();
       res.json(student);
     } else {
       res.status(404).send('Student not found');
@@ -132,6 +143,75 @@ exports.setAllMonthsPaid = async (req, res) => {
       res.status(404).send('Student not found');
     }
   } catch (error) {
+    res.status(500).send('Server Error');
+  }
+};
+
+// Unset free card: mark all months from the current month onward as unpaid
+exports.unsetAllMonthsPaid = async (req, res) => {
+  try {
+    const { studentID } = req.params;
+    const student = await Student.findOne({ studentID });
+
+    if (student) {
+      // Get the current month index to determine where to start unsetting payments
+      const currentMonthIndex = new Date().getMonth();
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      // Update the `paymentStatus` map, setting current and future months to "Not Paid"
+      months.forEach((month, index) => {
+        if (index >= currentMonthIndex) {
+          student.paymentStatus.set(month, 'Not Paid');
+        }
+      });
+
+      // Save the updated student data to MongoDB
+      await student.save();
+      res.json({ success: true, student });
+    } else {
+      res.status(404).send('Student not found');
+    }
+  } catch (error) {
+    console.error('Error unsetting all months paid:', error);
+    res.status(500).send('Server Error');
+  }
+};
+
+
+exports.promoteAllStudents = async (req, res) => {
+  try {
+    // Fetch all students
+    const students = await Student.find();
+
+    // Check if students exist
+    if (!students || students.length === 0) {
+      console.log("No students found");
+      return res.status(404).send('No students found');
+    }
+
+    // Iterate over each student to promote or remove
+    for (let student of students) {
+      console.log(`Processing student: ${student.studentID} - Grade: ${student.grade}`);
+
+      if (student.grade === 11) {
+        // Remove students in Grade 11 from the system
+        console.log(`Removing student: ${student.studentID}`);
+        await Student.deleteOne({ _id: student._id });
+      } else {
+        // Promote students in other grades by increasing their grade
+        console.log(`Promoting student: ${student.studentID}`);
+        student.grade += 1;
+        student.paymentStatus = {}; // Reset payment statuses
+        await student.save();
+      }
+    }
+
+    res.json({ message: 'Students promoted successfully. Grade 11 students have been removed.' });
+  } catch (error) {
+    console.error('Error promoting students:', error);
     res.status(500).send('Server Error');
   }
 };

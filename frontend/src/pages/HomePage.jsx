@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../components/Button';
-import { FaCloud, FaUserPlus, FaUsers, FaFileAlt, FaMoneyBillWave } from 'react-icons/fa';
+import { FaCloud, FaUserPlus, FaUsers, FaFileAlt, FaMoneyBillWave, FaGraduationCap } from 'react-icons/fa';
+import { promoteAllStudents } from '../api/studentAPI'; // Import the function for promoting students
 
 const HomePage = () => {
-  const oneDriveUrl = 'https://mysliit-my.sharepoint.com/my?id=%2Fpersonal%2Fit22357908%5Fmy%5Fsliit%5Flk%2FDocuments%2FY3S1%20Project%20Group';
+  const oneDriveUrl = 'https://mysliit-my.sharepoint.com/...';
 
   const openOneDrive = () => {
     window.open(oneDriveUrl, '_blank');
+  };
+
+  const [isPromoting, setIsPromoting] = useState(false);
+
+  const handlePromoteAll = async () => {
+    setIsPromoting(true);
+    try {
+      await promoteAllStudents(); // API call to promote students
+      alert('All students have been promoted to the next grade. Grade 11 students have been removed.');
+    } catch (error) {
+      console.error('Error promoting students:', error);
+      alert('Failed to promote students. Please try again.');
+    } finally {
+      setIsPromoting(false);
+    }
   };
 
   return (
@@ -59,6 +75,17 @@ const HomePage = () => {
             <p className="text-gray-600 mb-4 md:mb-6">Generate detailed reports on student data.</p>
             <a href="/reports" className="text-teal-600 font-medium hover:underline">Create Reports</a>
           </div>
+        </div>
+        <div className="container mx-auto text-right pr-4 mt-8">
+          <button
+            onClick={handlePromoteAll}
+            disabled={isPromoting}
+            className={`bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition-transform transform hover:scale-105 ${
+              isPromoting ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {isPromoting ? 'Promoting...' : 'Promote All Students'}
+          </button>
         </div>
       </section>
     </div>

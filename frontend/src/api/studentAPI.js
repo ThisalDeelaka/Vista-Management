@@ -63,3 +63,17 @@ export const deleteStudent = async (studentID) => {
 export const setAllMonthsPaid = async (studentID) => {
   return await axios.put(`${API_URL}/students/${studentID}/set-all-paid`);
 };
+
+// Function to unset Free Card
+export const unsetAllMonthsPaid = async (studentID) => {
+  try {
+    return await axios.put(`${API_URL}/students/${studentID}/unset-all-paid`);
+  } catch (error) {
+    console.error("Error unsetting all months paid:", error);
+    throw error;
+  }
+};
+
+export const promoteAllStudents = async () => {
+  return await axios.put(`${API_URL}/promote-all`);
+};
