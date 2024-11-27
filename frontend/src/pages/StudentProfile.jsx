@@ -78,20 +78,21 @@ const StudentProfile = () => {
       await unsetAllMonthsPaid(studentID);
       alert('Unset Free Card - Current & Future months unpaid');
       setIsFreeCard(false);
-
+  
       const currentMonthIndex = new Date().getMonth();
       const updatedPaymentStatus = { ...student.paymentStatus };
       months.forEach((month, index) => {
         if (index >= currentMonthIndex) {
-          updatedPaymentStatus[month] = 'false';
+          updatedPaymentStatus[month] = false;
         }
       });
-
+  
       setStudent({ ...student, paymentStatus: updatedPaymentStatus });
     } catch (error) {
       console.error('Error unsetting all months paid:', error);
     }
   };
+  
   
   const handleEditToggle = () => setEditMode(!editMode);
 
