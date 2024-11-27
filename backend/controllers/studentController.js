@@ -164,7 +164,7 @@ exports.unsetAllMonthsPaid = async (req, res) => {
       // Update the `paymentStatus` map, setting current and future months to "Not Paid"
       months.forEach((month, index) => {
         if (index >= currentMonthIndex) {
-          student.paymentStatus.set(month, 'Not Paid');
+          student.paymentStatus.set(month, 'false');
         }
       });
 

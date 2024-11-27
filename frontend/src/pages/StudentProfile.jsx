@@ -83,7 +83,7 @@ const StudentProfile = () => {
       const updatedPaymentStatus = { ...student.paymentStatus };
       months.forEach((month, index) => {
         if (index >= currentMonthIndex) {
-          updatedPaymentStatus[month] = 'Not Paid';
+          updatedPaymentStatus[month] = 'false';
         }
       });
 
